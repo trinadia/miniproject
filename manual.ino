@@ -1,56 +1,18 @@
-/*
-#include <Servo.h>
-
-Servo myservo;
-int servoPin = 6;
-int PB_1 = 2;
-int PB_2 = 4;
-int currentAngle = 0; // variable untuk menyimpan nilai sudut terbaru
-
-void setup() {
-  Serial.begin(9600);
-  myservo.attach(servoPin);
-  pinMode(PB_1, INPUT);
-  pinMode(PB_2, INPUT);
-  myservo.write(0);
-}
-
-void loop() {
-  rotate(PB_1, 10);
-  rotate(PB_2, -10);
-}
-void rotate(int buttonPin, int increment) {
-  int buttonState = digitalRead(buttonPin); // Read the button state
-
-  if (buttonState == HIGH) {
-    currentAngle = currentAngle + increment;
-    int currentRead = myservo.read() + increment;
-    if (currentRead > 180){
-      currentRead = 180;
-    }
-    else if (currentRead < 0){
-      currentRead = 0;
-    }
-    // 
-    Serial.print("Sudut (derajat): ");
-    Serial.println(currentRead);
-  }
-  myservo.write(currentAngle);
-  delay(50); 
-}
-*/
 #include <Servo.h>
 
 Servo servo1, servo2; servo3, servoBase; 
 int servoPin[] = {3,5,6,9};
 int buttonPin[] = {2,4,7,8,12,13};
-float angle1, angle2, angle3;
+const int switchPin = 10; // NOT PUSHBUTTON
+const int pingPin = ;
+int angle1, angle2, angle3 = 0;
+int baseAngle = 0;
 
 void setup() {
-  for (int i = 0; i < 6;i++){
+  for (int i = 0; i < 6;i++){ // forward, backward, left, right, up, down
     pinMode(buttonPin[i], INPUT);
     }
-  // forward, backward, left, right, up, down
+  pinMode(switchPin, INPUT);
   servo1.attach(servoPin[0]);
   servo2.attach(servoPin[1]);
   servo3.attach(servoPin[2]);
@@ -63,27 +25,79 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  // forward();
-  //
+  //if (switchState == HIGH) {
+    //manualmode();
+  //}
 }
+// --------- MANUAL FUNCTIONS --------
+void manualMode(){
+  /*
+  MANUAL TASKS
+  */
+  int forward = digitalRead(buttonPin[0]);
+  int backward = digitalRead(buttonPin[1]);
+  int left = digitalRead(buttonPin[2]);
+  int right = digitalRead(buttonPin[3]);
+  int up = digitalRead(buttonPin[4]);
+  int down = digitalRead(buttonPin[5]);
+
+  // FORWARD
+  if (forward == HIGH){
+    angle1 = angle1 - 10;// CW, -
+    angle2 = angle2 + 10; // CCW
+    angle3 = angle3 + 10; // CCW
+  }
+  // BACKWARD
+  if (backward == HIGH){
+    angle1 = angle1 + 10;// CW, -
+    angle2 = angle2 - 10; // CCW
+    angle3 = angle3 - 10; // CCW
+  }
+  if (left == HIGH){
+    baseAngle = baseAngle + 10;
+  }
+  if (right == HIGH){
+    baseAngle = baseAngle - 10;
+  }
+  if (up == HIGH) {
+    angle1 = angle1 + 10;// CW, -
+    angle2 = angle2 + 10; // CCW
+    angle3 = angle3 + 10; // CCW
+  }
+  if (down == HIGH) {
+    angle1 = angle1 - 10;// CW, -
+    angle2 = angle2 - 10; // CCW
+    angle3 = angle3 - 10; // CCW
+  }
+  servo1.write(angle1);
+  servo2.write(angle2);
+  servo3.write(angle3);
+  delay(50); 
+}
+void autoMode() {
+  
+}
+// ---------------------------------
 void forward(int button){
   
-}
-void backward(int button){
-  
-}
-void left(int button){
-  
-}
-void right(int button){
-  
-}
-void up(int button){
-  
-}
-void down(int button){
-  
+  int buttonState = digitalRead(button); // Read the button state
+
+  if (buttonState == HIGH) {
+    angle1 = angle1 + 5;
+    
+    //int currentRead = myservo.read() + increment;
+    //if (currentRead > 180){
+      //currentRead = 180;
+    //}
+    else if (currentRead < 0){
+      currentRead = 0;
+    }
+    // 
+    Serial.print("Sudut (derajat): ");
+    Serial.println(currentRead);
+  }
+  myservo.write(currentAngle);
+  delay(50); 
 }
 //---------------------------------------------------------
 /*

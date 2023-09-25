@@ -4,9 +4,12 @@
 Servo servo1, servo2, servo3, servoBase, gripper; 
 int servoPin[] = {3,5,6,9,10};
 // int buttonPin[] = {2,4,7,8,12,13};
-const int updown = A0;
-const int leftright = A1;
-const int forback = A2;
+const int potpin1 = A0;
+const int potpin2 = A1;
+const int potpin3 = A2;
+const int pin_left = 2;
+const int pin_right = 4;
+const int grip_pin = 12;
 const int switchPin = 10; // NOT PUSHBUTTON
 const int trigPin = 7;  
 const int echoPin = 8; 
@@ -17,7 +20,9 @@ void setup() {
   //for (int i = 0; i < 6;i++){ // forward, backward, left, right, up, down
     //pinMode(buttonPin[i], INPUT);
     //}
-  
+  pinMode(pin_left, INPUT);
+  pinMode(pin_right, INPUT);
+  pinMode(grip_pin, INPUT);
   pinMode(switchPin, INPUT);
   servo1.attach(servoPin[0]);
   servo2.attach(servoPin[1]);
@@ -47,17 +52,33 @@ void loop() {
 void manualMode(){
   
   // MANUAL TASKS
-  int potentio1 = analogRead(updown);
-  int potentio2 = analogRead(leftright);
-  int potentio3 = analogRead(forback);
+  int potentio1 = analogRead(potpin1);
+  int potentio2 = analogRead(potpin2);
+  int potentio3 = analogRead(potpin3);
+  int left = digitalRead(pin_left);
+  int right = digitalRead(pin_right);
+  int gripping = digitalRead(grip_pin);
 
+  /*
   angle1 = map(potentio1, 0, 1023, 0, 180);
   angle2 = map(potentio2, 0, 1023, 0, 180);
-  angle3 = map(potentio3, 0, 1023, 0, 180);
+  //angle3 = map(potentio3, 0, 1023, 0, 180);
+  */
+  updown = map(potentio1, 0, 1023, 0, 180);
+  forback = map(potentio2, 0, 1023, 0, 180);
+  //angle3 = map(potentio3, 0, 1023, 0, 180);
+  
+  if (left == HIGH) {
+    baseAngle = baseAngle - 10;
+  }
+  if (right == HIGH) {
+    baseAngle = baseAngle + 10;
+  }
   
   servo1.write(angle1);
   servo2.write(angle2);
   servo3.write(angle3);
+  servoBase.write(baseAngle);
   delay(50); 
 }
 void autoMode() {

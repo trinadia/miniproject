@@ -1,11 +1,11 @@
 #include <Servo.h>
 
-Servo servo1, servo2; servo3, servoBase, gripper; 
+Servo servo1, servo2, servo3, servoBase, gripper; 
 int servoPin[] = {3,5,6,9,10};
 int buttonPin[] = {2,4,7,8,12,13};
 const int switchPin = 10; // NOT PUSHBUTTON
-const trigPin = A0;  
-const echoPin = A1; 
+const int trigPin = A0;  
+const int echoPin = A1; 
 int angle1, angle2, angle3 = 0;
 int baseAngle = 0;
 

@@ -4,7 +4,8 @@ Servo servo1, servo2; servo3, servoBase;
 int servoPin[] = {3,5,6,9};
 int buttonPin[] = {2,4,7,8,12,13};
 const int switchPin = 10; // NOT PUSHBUTTON
-const int pingPin = ;
+const int trigPin = 5;  
+const int echoPin = 6; 
 int angle1, angle2, angle3 = 0;
 int baseAngle = 0;
 
@@ -17,6 +18,10 @@ void setup() {
   servo2.attach(servoPin[1]);
   servo3.attach(servoPin[2]);
   servoBase.attach(servoPin[3]);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+  
   // servo1.write(0); //set sudut awal
   // servo2.write(0); 
   // servo3.write(0);
@@ -25,9 +30,11 @@ void setup() {
 }
 
 void loop() {
+  // SWITCH MODE
   //if (switchState == HIGH) {
     //manualmode();
   //}
+  
 }
 // --------- MANUAL FUNCTIONS --------
 void manualMode(){
@@ -75,9 +82,25 @@ void manualMode(){
   delay(50); 
 }
 void autoMode() {
-  
+  // set base servo to face toward danger zone 1
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration*.0342)/2;
+
+  if (distance < 5){
+    // give command to gripper
+    
+  }
+  delay(100);
 }
+
 // ---------------------------------
+/*
 void forward(int button){
   
   int buttonState = digitalRead(button); // Read the button state

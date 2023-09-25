@@ -3,17 +3,21 @@
 
 Servo servo1, servo2, servo3, servoBase, gripper; 
 int servoPin[] = {3,5,6,9,10};
-int buttonPin[] = {2,4,7,8,12,13};
+// int buttonPin[] = {2,4,7,8,12,13};
+const int updown = A0;
+const int leftright = A1;
+const int forback = A2;
 const int switchPin = 10; // NOT PUSHBUTTON
-const int trigPin = A0;  
-const int echoPin = A1; 
+const int trigPin = 7;  
+const int echoPin = 8; 
 int angle1, angle2, angle3 = 0;
 int baseAngle = 0;
 
 void setup() {
-  for (int i = 0; i < 6;i++){ // forward, backward, left, right, up, down
-    pinMode(buttonPin[i], INPUT);
-    }
+  //for (int i = 0; i < 6;i++){ // forward, backward, left, right, up, down
+    //pinMode(buttonPin[i], INPUT);
+    //}
+  
   pinMode(switchPin, INPUT);
   servo1.attach(servoPin[0]);
   servo2.attach(servoPin[1]);
@@ -41,16 +45,16 @@ void loop() {
 }
 // --------- MANUAL FUNCTIONS --------
 void manualMode(){
+  
+  // MANUAL TASKS
   /*
-  MANUAL TASKS
-  */
   int forward = digitalRead(buttonPin[0]);
   int backward = digitalRead(buttonPin[1]);
   int left = digitalRead(buttonPin[2]);
   int right = digitalRead(buttonPin[3]);
   int up = digitalRead(buttonPin[4]);
   int down = digitalRead(buttonPin[5]);
-
+  
   // FORWARD
   if (forward == HIGH){
     angle1 = angle1 - 10;// CW, -
@@ -79,6 +83,15 @@ void manualMode(){
     angle2 = angle2 - 10; // CCW
     angle3 = angle3 - 10; // CCW
   }
+  */
+  int potentio1 = analogRead(updown);
+  int potentio2 = analogRead(leftright);
+  int potentio3 = analogRead(forback);
+
+  angle1 = map(potentio1, 0, 1023, 0, 180);
+  angle2 = map(potentio2, 0, 1023, 0, 180);
+  angle3 = map(potentio3, 0, 1023, 0, 180);
+  
   servo1.write(angle1);
   servo2.write(angle2);
   servo3.write(angle3);

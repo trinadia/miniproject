@@ -1,3 +1,4 @@
+// consider usingn potentiometer
 #include <Servo.h>
 
 Servo servo1, servo2, servo3, servoBase, gripper; 

@@ -83,6 +83,7 @@ void manualMode(){
 }
 void autoMode() {
   // set base servo to face toward danger zone 1
+  // scanning mechanism:
   // if the servo already faces certain zone but no object detected, move to another zone
   // read servo + conditioning distance from sensor
   digitalWrite(trigPin, LOW);

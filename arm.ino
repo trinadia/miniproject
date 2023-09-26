@@ -14,15 +14,16 @@ const int grip_pin = 12;
 const int switchPin = 10; // NOT PUSHBUTTON
 const int trigPin = 7;  
 const int echoPin = 8; 
+
 int angle1, angle2, angle3 = 0;
 int baseAngle = 0;
+bool isManual = false;
+bool lastButtonState = LOW;
 
 void setup() {
   //for (int i = 0; i < 6;i++){ // forward, backward, left, right, up, down
     //pinMode(buttonPin[i], INPUT);
     //}
-  //pinMode(pin_left, INPUT);
-  //pinMode(pin_right, INPUT);
   pinMode(grip_pin, INPUT);
   pinMode(switchPin, INPUT);
   servo1.attach(servoPin[0]);
@@ -47,6 +48,16 @@ void loop() {
   //if (switchState == HIGH) {
     //manualmode();
   //}
+  int buttonState = digitalRead(buttonPin);
+
+  if (buttonState == HIGH && lastButtonState == LOW) {
+    isManual = !isManual; //becomes automatic?
+  }
+  lastButtonState = buttonState;
+  
+  if (isManual) {
+    manualMode();
+  }
   
 }
 // --------- MANUAL FUNCTIONS --------
@@ -61,7 +72,6 @@ void manualMode(){
   // int left = digitalRead(pin_left);
   // int right = digitalRead(pin_right);
   int gripping = digitalRead(grip_pin);
-
   /*
   angle1 = map(potentio1, 0, 1023, 0, 180);
   angle2 = map(potentio2, 0, 1023, 0, 180);

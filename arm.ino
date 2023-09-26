@@ -57,6 +57,8 @@ void loop() {
   
   if (isManual) {
     manualMode();
+  } else {
+    autoMode();
   }
   
 }
@@ -123,7 +125,7 @@ void autoMode() {
     // give command to gripper
     rescue(90);
     searching(90);
-  } else if (readAngle > 120 && readBase == 0){
+  } else if (readAngle > 120 && readBase == 0){ // no target found
     searching(45);
   }
   // ZONE 2

@@ -11,13 +11,13 @@ const int potpin4 = A3;
 //const int pin_left = 2;
 //const int pin_right = 4;
 const int grip_pin = 12;
-const int switchPin = 10; // NOT PUSHBUTTON
+const int switchPin = 11; // NOT PUSHBUTTON
 const int trigPin = 7;  
 const int echoPin = 8; 
 
-int angle1, angle2, angle3 = 0;
+int angle1, angle2, angle3, angle4;
 int baseAngle = 0;
-bool isManual = false;
+bool isManual = true;
 bool lastButtonState = LOW;
 
 void setup() {
@@ -35,11 +35,12 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
   
-  // servo1.write(0); //set sudut awal
-  // servo2.write(0); 
-  // servo3.write(0);
-  // servoBase.write(0);
-  // gripper.write(0);
+  //set sudut awal
+  servo1.write(0); 
+  servo2.write(0); 
+  servo3.write(0);
+  servoBase.write(0);
+  gripper.write(0);
   
 }
 
@@ -48,7 +49,7 @@ void loop() {
   //if (switchState == HIGH) {
     //manualmode();
   //}
-  int buttonState = digitalRead(buttonPin);
+  int buttonState = digitalRead(grip_pin);
 
   if (buttonState == HIGH && lastButtonState == LOW) {
     isManual = !isManual; //becomes automatic?
@@ -57,9 +58,9 @@ void loop() {
   
   if (isManual) {
     manualMode();
-  } else {
-    autoMode();
-  }
+  } //else {
+    //autoMode();
+  //}
   
 }
 // --------- MANUAL FUNCTIONS --------
@@ -74,17 +75,17 @@ void manualMode(){
   // int left = digitalRead(pin_left);
   // int right = digitalRead(pin_right);
   int gripping = digitalRead(grip_pin);
-  /*
+  
   angle1 = map(potentio1, 0, 1023, 0, 180);
   angle2 = map(potentio2, 0, 1023, 0, 180);
   angle3 = map(potentio3, 0, 1023, 0, 180);
-  angle4 = map(potentio3, 0, 1023, 0, 180);
-  */
+  angle4 = map(potentio4, 0, 1023, 0, 180);
+  
   if (gripping == 1){
     gripper.write(90);
   }
   else if (gripping == 0){
-    gripper.write(20);
+    gripper.write(10);
   }
   
   servo1.write(angle1);

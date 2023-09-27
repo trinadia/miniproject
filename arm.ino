@@ -49,7 +49,7 @@ void loop() {
   //if (switchState == HIGH) {
     //manualmode();
   //}
-  int buttonState = digitalRead(grip_pin);
+  int buttonState = digitalRead(switchPin);
 
   if (buttonState == HIGH && lastButtonState == LOW) {
     isManual = !isManual; //becomes automatic?
@@ -81,6 +81,7 @@ void manualMode(){
   angle3 = map(potentio3, 0, 1023, 0, 180);
   angle4 = map(potentio4, 0, 1023, 0, 180);
   
+
   if (gripping == 1){
     gripper.write(90);
   }

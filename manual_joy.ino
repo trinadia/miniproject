@@ -3,7 +3,7 @@
 #define joyY1 A1
 #define joyX2 A2
 #define joyY2 A3
-const int grip_pin = 2;
+//const int grip_pin = 2;
 const int servopin1 = 3; //servo1
 const int servopin2 = 5; //servo2
 const int servopin3 = 6; //servo3
@@ -23,7 +23,7 @@ Servo servo1, servo2, servo3, servoBase, gripper;
 void setup() {
   Serial.begin(9600);
   //Serial.begin(9600);
-  pinMode(grip_pin, INPUT);
+  //pinMode(grip_pin, INPUT);
   servo1.attach(servopin1);
   servo2.attach(servopin2);
   servo3.attach(servopin3);
@@ -39,7 +39,7 @@ void setup() {
  
 void loop() {
   // put your main code here, to run repeatedly:
-  int gripping = digitalRead(grip_pin);
+  // int gripping = digitalRead(grip_pin); 
   xValue1 = analogRead(joyX1);
   yValue1 = analogRead(joyY1);
   xValue2 = analogRead(joyX2);
@@ -82,10 +82,10 @@ void loop() {
     angle2 = angle2 + degreeY;
     angle3 = angle3 + degreeY;
   }
-  if (gripping == 1){
+  if (xValue2 < 512 || xValue2 > 512){ // ready to pickup/release
     gripper.write(90);
   }
-  else if (gripping == 0){
+  else if (xValue2 == 512){ // grip
     gripper.write(10);
   }
 

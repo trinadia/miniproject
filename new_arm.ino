@@ -3,7 +3,7 @@
 #define joyY1 A1
 #define joyX2 A2
 #define joyY2 A3
-//const int grip_pin = 2;
+const int switchPin = 2;
 const int servopin1 = 3; //servo1
 const int servopin2 = 5; //servo2
 const int servopin3 = 6; //servo3
@@ -21,6 +21,9 @@ int xValue2 = 0;
 int yValue2 = 0;
 
 Servo servo1, servo2, servo3, servoBase, gripper;
+
+int lastButtonState = LOW; 
+bool isManual = true;
 void setup() {
   Serial.begin(9600);
   servo1.attach(servopin1);
@@ -28,6 +31,7 @@ void setup() {
   servo3.attach(servopin3);
   servoBase.attach(servopin4);
   gripper.attach(servopin5);
+  pinMode(switchPin, INPUT);
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
@@ -44,7 +48,6 @@ void loop() {
   //if (switchState == HIGH) {
     //manualmode();
   //}
-
   // EVALUATE!!!!!!!!!!
   int buttonState = digitalRead(switchPin);
 
@@ -55,9 +58,9 @@ void loop() {
   
   if (isManual) {
     manualMode();
-  } //else {
-    //autoMode();
-  //}
+  } else {
+    autoMode();
+  }
   
 }
 // --------- MANUAL FUNCTIONS --------

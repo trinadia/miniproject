@@ -1,1 +1,1 @@
-# miniproject
+## Mini Project: Robotic Arm

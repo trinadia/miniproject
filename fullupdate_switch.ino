@@ -73,12 +73,16 @@ void manualMode(){
   Serial.print(xValue1);
   Serial.print("\t");
   Serial.println(yValue1);
+  Serial.print("\t");
+  Serial.print(xValue2);
+  Serial.print("\t");
+  Serial.println(yValue2);
 
   //int degreeX = map(xValue, 0, 1023, 0, 180);
   //int degreeY = map(yValue, 0, 1023, 0, 180);
   int degreeX = 5;
   int degreeY = 5;
-  int centmin = 510;
+  int centmin = 515;
   int centplus = 400;
 
   if (xValue1 < centmin){ // right
@@ -167,7 +171,7 @@ void autoMode() {
     else if (servo3.read() == 120 && servoBase.read() == 45 && distance > detected_distance) {
       servoBase.write(0);
     }
-    else if (servo1.read() == 120 && servoBase.read() != (0,45,90) && distance > detected_distance) {
+    else if (servo3.read() == 120 && servoBase.read() != (0,45,90) && distance > detected_distance) {
       servoBase.write(0);
     }
   }
@@ -220,6 +224,7 @@ void rescue() {
   servo1.write(liftPlace);
   servo2.write(liftPlace);
   servo3.write(liftPlace);
+  delay(1000);
   gripper.write(90); // Open
   delay(1000);
 

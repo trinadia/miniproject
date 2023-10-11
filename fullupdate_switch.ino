@@ -68,11 +68,11 @@ void manualMode(){
  
   //print the values with to plot or view
   Serial.print(xValue1);
-  Serial.print("\t");
-  Serial.println(yValue1);
-  Serial.print("\t");
+  Serial.print("  ");
+  Serial.print(yValue1);
+  Serial.print("  ");
   Serial.print(xValue2);
-  Serial.print("\t");
+  Serial.print("  ");
   Serial.println(yValue2);
 
   //int degreeX = map(xValue, 0, 1023, 0, 180);
@@ -101,7 +101,7 @@ void manualMode(){
   if (yValue2 < centplus){ // down
     angle2 = angle2 - degreeY;
   }
-  if (xValue2 > centmin || xValue2 < centmin){ // ready to pickup/release
+  if (xValue2 > centmin || xValue2 < centplus){ // ready to pickup/release
     gripper.write(90);
   }
   else if (centplus < xValue2 < centmin){ // grip
@@ -173,6 +173,7 @@ void rescue() {
   int putDown1 = 0; // angle of servo 1 when placing the target down
   int putDown2 = 20; 
   int moveFrom = servoBase.read();
+  int back1 = 45;
 
   if (moveFrom == 0) {
     // gripAngle = ;
@@ -216,6 +217,8 @@ void rescue() {
   delay(1000);
   gripper.write(90); // Open
   delay(1000);
+  servo1.write(back1); // move backward, prepare to move
+  delay(500);
 
   //MOVE
   servoBase.write(moveTo);

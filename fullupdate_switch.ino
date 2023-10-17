@@ -34,8 +34,8 @@ void setup() {
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
 
-  servo1.write(0);
-  servo2.write(0);
+  servo1.write(45);
+  servo2.write(45);
   servoBase.write(0);
   gripper.write(0);
   
@@ -82,29 +82,29 @@ void manualMode(){
   int centmin = 515;
   int centplus = 400;
 
-  if (xValue1 < centmin){ // right
+  if (xValue1 > centmin){ // right
     angleBase = angleBase + degreeX;
   }
-  if (xValue1 > centplus){ // left
+  else if (xValue1 < centplus){ // left
     angleBase = angleBase - degreeX;
   }
-  if (yValue1 > centmin){ // forward
-    angle1 = angle1 - degreeY; // lower
+  else if (yValue1 > centmin){ // forward
+    angle1 = angle1 + degreeY; // lower
   }
-  if (yValue1 < centplus){ // backward
-    angle1 = angle1 + degreeY;
+  else if (yValue1 < centplus){ // backward
+    angle1 = angle1 - degreeY;
   }
   // joystick 2
   if (yValue2 > centmin){ // up
     angle2 = angle2 + degreeY;
   } 
-  if (yValue2 < centplus){ // down
+  else if (yValue2 < centplus){ // down
     angle2 = angle2 - degreeY;
   }
-  if (xValue2 > centmin || xValue2 < centplus){ // ready to pickup/release
+  else if (xValue2 > centmin || xValue2 < centplus){ // ready to pickup/release
     gripper.write(90);
   }
-  else if (centplus < xValue2 < centmin){ // grip
+  else if (xValue2 > centplus && xValue2 < centmin){ // grip
     gripper.write(10);
   }
 
@@ -144,7 +144,7 @@ void autoMode() {
         delay(1000); // Delay for stability (adjust as needed).
         break; // Exit the scanning loop.
       }
-      servo1.write(180-i);
+      servo1.write(i);
 
       delay(20); // Adjust the delay as needed to control servo speed.
     }

@@ -93,17 +93,29 @@ void manualMode(){
     angleBase = angleBase - degreeX;
   }
   else if (yValue1 > centmin){ // forward
-    angle1 = angle1 + degreeY; 
+    angle1 = angle1 + degreeY;
+    if (angle1 > 110) {
+      angle1 = 110;
+    }
   }
   else if (yValue1 < centplus){ // backward
     angle1 = angle1 - degreeY;
+    if (angle1 < 20) {
+      angle1 = 20;
+    }
   }
   // joystick 2
   if (yValue2 > centmin){ // up
     angle2 = angle2 - degreeY; // the more it goes to 0, the upper it lifts
+    if (angle1 < 20) {
+      angle1 = 20;
+    }
   } 
   else if (yValue2 < centplus){ // down
     angle2 = angle2 + degreeY;
+    if (angle2 > 90) {
+      angle2 = 90;
+    }
   }
   else if (xValue2 > centmin || xValue2 < centplus){ // ready to pickup/release
     gripper.write(gripperopen);

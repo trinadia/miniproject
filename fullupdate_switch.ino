@@ -4,12 +4,12 @@
 #define joyX2 A2
 #define joyY2 A3
 const int switchPin = 2;
-const int servopin1 = 3; //servo1
-const int servopin2 = 5; //servo2
+const int servopin1 = 9; //servo1 (forward-backward)
+const int servopin2 = 10; //servo2 (up-down)
 const int servopin4 = 6; //base
-const int servopin5 = 9; //base
-const int trigPin = 7;
-const int echoPin = 8;
+const int servopin5 = 11; //gripper
+const int trigPin = 4;
+const int echoPin = 5;
 
 int angle1, angle2, angleBase, moveTo, safezone = 0;
 int detected_distance = 10;
@@ -36,8 +36,8 @@ void setup() {
 
   servo1.write(45);
   servo2.write(45);
-  servoBase.write(0);
-  gripper.write(0);
+  servoBase.write(20);
+  gripper.write(90);
   
 }
 
@@ -75,13 +75,17 @@ void manualMode(){
   Serial.print("  ");
   Serial.println(yValue2);
 
-  //int degreeX = map(xValue, 0, 1023, 0, 180);
-  //int degreeY = map(yValue, 0, 1023, 0, 180);
   int degreeX = 5;
   int degreeY = 5;
   int centmin = 515;
   int centplus = 400;
+  int gripperclose = 120;
+  int gripperopen = 90;
 
+  // servo1 (for-ba): 20 (nearest) - 160 (furthest, set to 90).
+  // servo1 (up-do): 0 (upmost) - 90 (downmost) 
+  // gripper: 90 (open) & 180 (close) 
+  // base
   if (xValue1 > centmin){ // right
     angleBase = angleBase + degreeX;
   }
@@ -89,23 +93,23 @@ void manualMode(){
     angleBase = angleBase - degreeX;
   }
   else if (yValue1 > centmin){ // forward
-    angle1 = angle1 + degreeY; // lower
+    angle1 = angle1 + degreeY; 
   }
   else if (yValue1 < centplus){ // backward
     angle1 = angle1 - degreeY;
   }
   // joystick 2
   if (yValue2 > centmin){ // up
-    angle2 = angle2 + degreeY;
+    angle2 = angle2 - degreeY; // the more it goes to 0, the upper it lifts
   } 
   else if (yValue2 < centplus){ // down
-    angle2 = angle2 - degreeY;
+    angle2 = angle2 + degreeY;
   }
   else if (xValue2 > centmin || xValue2 < centplus){ // ready to pickup/release
-    gripper.write(90);
+    gripper.write(gripperopen);
   }
   else if (xValue2 > centplus && xValue2 < centmin){ // grip
-    gripper.write(10);
+    gripper.write(gripperclose);
   }
 
   servo1.write(angle1);
@@ -148,17 +152,17 @@ void autoMode() {
 
       delay(20); // Adjust the delay as needed to control servo speed.
     }
-    if (servo1.read() == 120 && servoBase.read() == 0 && distance > detected_distance) {
+    if (servo1.read() == 120 && servoBase.read() == 20 && distance > detected_distance) {
       servoBase.write(90);
     }
     else if (servo1.read() == 120 && servoBase.read() == 90 && distance > detected_distance) {
       servoBase.write(45);
     }
     else if (servo1.read() == 120 && servoBase.read() == 45 && distance > detected_distance) {
-      servoBase.write(0);
+      servoBase.write(20);
     }
-    else if (servo1.read() == 120 && servoBase.read() != (0,45,90) && distance > detected_distance) {
-      servoBase.write(0);
+    else if (servo1.read() == 120 && servoBase.read() != (20,45,90) && distance > detected_distance) {
+      servoBase.write(20);
     }
   }
   delay(100);
@@ -175,7 +179,7 @@ void rescue() {
   int moveFrom = servoBase.read();
   int back1 = 45;
 
-  if (moveFrom == 0) {
+  if (moveFrom == 20) {
     // gripAngle = ;
     safezone = 25; // safe zone 1
     putDown1 = 20;
@@ -191,7 +195,7 @@ void rescue() {
     // gripAngle = ;
     safezone = moveFrom;
     putDown1 = 45;
-    moveTo = 0;
+    moveTo = 20;
   }
 
   // GRIP
@@ -224,6 +228,7 @@ void rescue() {
   servoBase.write(moveTo);
   delay(1000);
 }
+/*
 void searching() {
   int servoRead =  servoBase.read();
   if ( servoRead == 0) {
@@ -239,3 +244,4 @@ void searching() {
     servoBase.write(0);
   }
 }
+*/
